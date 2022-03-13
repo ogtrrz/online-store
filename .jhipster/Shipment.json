@@ -1,5 +1,5 @@
 {
-  "applications": "*",
+  "applications": ["store"],
   "changelogDate": "20220310182256",
   "dto": "no",
   "embedded": false,
@@ -26,10 +26,12 @@
   "readOnly": false,
   "relationships": [
     {
+      "otherEntityField": "code",
       "otherEntityName": "invoice",
       "otherEntityRelationshipName": "shipment",
       "relationshipName": "invoice",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
   "service": "serviceClass"

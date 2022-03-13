@@ -155,7 +155,7 @@ export const Customer = (props: RouteComponentProps<{ url: string }>) => {
                   <td>{customer.addressLine2}</td>
                   <td>{customer.city}</td>
                   <td>{customer.country}</td>
-                  <td>{customer.user ? customer.user.id : ''}</td>
+                  <td>{customer.user ? customer.user.login : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${customer.id}`} color="info" size="sm" data-cy="entityDetailsButton">

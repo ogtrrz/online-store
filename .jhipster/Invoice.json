@@ -1,5 +1,5 @@
 {
-  "applications": "*",
+  "applications": ["store"],
   "changelogDate": "20220310182255",
   "dto": "no",
   "embedded": false,
@@ -35,6 +35,11 @@
       "fieldName": "paymentAmount",
       "fieldType": "BigDecimal",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,
@@ -50,10 +55,12 @@
       "relationshipType": "one-to-many"
     },
     {
+      "otherEntityField": "code",
       "otherEntityName": "productOrder",
       "otherEntityRelationshipName": "invoice",
       "relationshipName": "order",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
   "service": "serviceClass"

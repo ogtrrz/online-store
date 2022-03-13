@@ -1,5 +1,5 @@
 {
-  "applications": "*",
+  "applications": ["store"],
   "changelogDate": "20220310182253",
   "dto": "no",
   "embedded": false,
@@ -41,10 +41,12 @@
       "relationshipType": "one-to-many"
     },
     {
+      "otherEntityField": "email",
       "otherEntityName": "customer",
       "otherEntityRelationshipName": "order",
       "relationshipName": "customer",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
   "service": "serviceClass"

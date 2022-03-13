@@ -54,7 +54,7 @@ export const ProductOrderDetail = (props: RouteComponentProps<{ id: string }>) =
           <dt>
             <Translate contentKey="storeApp.productOrder.customer">Customer</Translate>
           </dt>
-          <dd>{productOrderEntity.customer ? productOrderEntity.customer.id : ''}</dd>
+          <dd>{productOrderEntity.customer ? productOrderEntity.customer.email : ''}</dd>
         </dl>
         <Button tag={Link} to="/product-order" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

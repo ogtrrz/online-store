@@ -142,12 +142,21 @@ public class ProductOrderResource {
      * {@code GET  /product-orders} : get all the productOrders.
      *
      * @param pageable the pagination information.
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of productOrders in body.
      */
     @GetMapping("/product-orders")
-    public ResponseEntity<List<ProductOrder>> getAllProductOrders(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<ProductOrder>> getAllProductOrders(
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable,
+        @RequestParam(required = false, defaultValue = "true") boolean eagerload
+    ) {
         log.debug("REST request to get a page of ProductOrders");
-        Page<ProductOrder> page = productOrderService.findAll(pageable);
+        Page<ProductOrder> page;
+        if (eagerload) {
+            page = productOrderService.findAllWithEagerRelationships(pageable);
+        } else {
+            page = productOrderService.findAll(pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

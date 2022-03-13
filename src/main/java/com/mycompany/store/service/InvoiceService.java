@@ -66,6 +66,9 @@ public class InvoiceService {
                 if (invoice.getPaymentAmount() != null) {
                     existingInvoice.setPaymentAmount(invoice.getPaymentAmount());
                 }
+                if (invoice.getCode() != null) {
+                    existingInvoice.setCode(invoice.getCode());
+                }
 
                 return existingInvoice;
             })
@@ -85,6 +88,15 @@ public class InvoiceService {
     }
 
     /**
+     * Get all the invoices with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<Invoice> findAllWithEagerRelationships(Pageable pageable) {
+        return invoiceRepository.findAllWithEagerRelationships(pageable);
+    }
+
+    /**
      * Get one invoice by id.
      *
      * @param id the id of the entity.
@@ -93,7 +105,7 @@ public class InvoiceService {
     @Transactional(readOnly = true)
     public Optional<Invoice> findOne(Long id) {
         log.debug("Request to get Invoice : {}", id);
-        return invoiceRepository.findById(id);
+        return invoiceRepository.findOneWithEagerRelationships(id);
     }
 
     /**

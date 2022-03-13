@@ -1,95 +1,140 @@
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName store
+    blueprints []
+    buildTool gradle
+    cacheProvider hazelcast
+    clientFramework react
+    clientPackageManager npm
+    clientTheme cerulean
+    clientThemeVariant dark
+    creationTimestamp 1646915960715
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableGradleEnterprise false
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation true
+    gradleEnterpriseHost ""
+    jhiPrefix jhi
+    jhipsterVersion "7.7.0"
+    jwtSecretKey "ODNiYmI4YzNiYWQ3MzUwOTU5MjM4MTU0MzcxOTM2MDc2MmVkNjhiYzg0ZmQzNjViY2IxYjE5M2NhM2M2MDkwYmY2ODQ5ZDNlNGNkYjlkYmJlMWEyMWQwYjA4MWM2NmU3ZDM0NzlmYjRkM2FlMmQ4NzljMDY4MjAyZDNiMTU1ODQ="
+    languages [en, es]
+    messageBroker false
+    nativeLanguage en
+    otherModules []
+    packageName com.mycompany.store
+    prodDatabaseType mysql
+    reactive false
+    searchEngine false
+    serverPort 8080
+    serviceDiscoveryType no
+    skipUserManagement false
+    testFrameworks [protractor]
+    websocket spring-websocket
+    withAdminUi true
+  }
 
-
-
-/** Product sold by the Online store */
-entity Product {
-name String required
-description String
-price BigDecimal required min(0)
-productSize ProductSize required
-image ImageBlob
-}
-enum ProductSize {
-S, M, L, XL, XXL
-}
-entity ProductCategory {
-name String required
+  entities Customer, Invoice, OrderItem, Product, ProductCategory, ProductOrder, Shipment
 }
 
 entity Customer {
-firstName String required
-lastName String required
-gender Gender required
-email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
-phone String required
-addressLine1 String required
-addressLine2 String
-city String required
-country String required
+  firstName String required
+  lastName String required
+  gender Gender required
+  email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  phone String required
+  addressLine1 String required
+  addressLine2 String
+  city String required
+  country String required
 }
-enum Gender {
-MALE, FEMALE, OTHER
-}
-
-entity ProductOrder {
-placedDate Instant required
-status OrderStatus required
-code String required
-}
-enum OrderStatus {
-COMPLETED, PENDING, CANCELLED
+entity Invoice {
+  date Instant required
+  details String
+  status InvoiceStatus required
+  paymentMethod PaymentMethod required
+  paymentDate Instant required
+  paymentAmount BigDecimal required
+  code String required
 }
 entity OrderItem {
-quantity Integer required min(0)
-totalPrice BigDecimal required min(0)
-status OrderItemStatus required
+  quantity Integer required min(0)
+  totalPrice BigDecimal required min(0)
+  status OrderItemStatus required
 }
-enum OrderItemStatus {
-AVAILABLE, OUT_OF_STOCK, BACK_ORDER
+/**
+ * Product sold by the Online store
+ */
+entity Product {
+  name String required
+  description String
+  price BigDecimal required min(0)
+  productSize ProductSize required
+  image ImageBlob
 }
-
-entity Invoice {
-date Instant required
-details String
-status InvoiceStatus required
-paymentMethod PaymentMethod required
-paymentDate Instant required
-paymentAmount BigDecimal required
+entity ProductCategory {
+  name String required
 }
-enum InvoiceStatus {
-PAID, ISSUED, CANCELLED
-}
-enum PaymentMethod {
-CREDIT_CARD, CASH_ON_DELIVERY, PAYPAL
+entity ProductOrder {
+  placedDate Instant required
+  status OrderStatus required
+  code String required
 }
 entity Shipment {
-trackingCode String
-date Instant required
-details String
+  trackingCode String
+  date Instant required
+  details String
+}
+enum Gender {
+  MALE,
+  FEMALE,
+  OTHER
+}
+enum InvoiceStatus {
+  PAID,
+  ISSUED,
+  CANCELLED
+}
+enum PaymentMethod {
+  CREDIT_CARD,
+  CASH_ON_DELIVERY,
+  PAYPAL
+}
+enum OrderItemStatus {
+  AVAILABLE,
+  OUT_OF_STOCK,
+  BACK_ORDER
+}
+enum ProductSize {
+  S,
+  M,
+  L,
+  XL,
+  XXL
+}
+enum OrderStatus {
+  COMPLETED,
+  PENDING,
+  CANCELLED
 }
 
 relationship OneToOne {
-Customer{user} to User
+Customer{user(login) required} to User
 }
-
 relationship ManyToOne {
-OrderItem{product} to Product
+OrderItem{product(name) required} to Product
 }
-
 relationship OneToMany {
-Customer{order} to ProductOrder{customer},
-ProductOrder{orderItem} to OrderItem{order},
-ProductOrder{invoice} to Invoice{order},
-Invoice{shipment} to Shipment{invoice},
-ProductCategory{product} to Product{productCategory}
+Customer{order} to ProductOrder{customer(email) required},
+ProductOrder{orderItem} to OrderItem{order(code) required},
+ProductOrder{invoice} to Invoice{order(code) required},
+Invoice{shipment} to Shipment{invoice(code) required},
+ProductCategory{product} to Product{productCategory(name)}
 }
 
-service * with serviceClass
-paginate Product, Customer, ProductOrder, Invoice, Shipment, OrderItem with pagination
-
-
-
-
-
-
-    
+paginate Customer, Invoice, OrderItem, Product, ProductOrder, Shipment with pagination
+service Customer, Invoice, OrderItem, Product, ProductCategory, ProductOrder, Shipment with serviceClass

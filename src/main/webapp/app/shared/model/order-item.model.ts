@@ -7,8 +7,8 @@ export interface IOrderItem {
   quantity?: number;
   totalPrice?: number;
   status?: OrderItemStatus;
-  product?: IProduct | null;
-  order?: IProductOrder | null;
+  product?: IProduct;
+  order?: IProductOrder;
 }
 
 export const defaultValue: Readonly<IOrderItem> = {};

@@ -6,7 +6,7 @@ export interface IShipment {
   trackingCode?: string | null;
   date?: string;
   details?: string | null;
-  invoice?: IInvoice | null;
+  invoice?: IInvoice;
 }
 
 export const defaultValue: Readonly<IShipment> = {};

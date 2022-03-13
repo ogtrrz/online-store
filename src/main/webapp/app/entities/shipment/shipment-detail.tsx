@@ -50,7 +50,7 @@ export const ShipmentDetail = (props: RouteComponentProps<{ id: string }>) => {
           <dt>
             <Translate contentKey="storeApp.shipment.invoice">Invoice</Translate>
           </dt>
-          <dd>{shipmentEntity.invoice ? shipmentEntity.invoice.id : ''}</dd>
+          <dd>{shipmentEntity.invoice ? shipmentEntity.invoice.code : ''}</dd>
         </dl>
         <Button tag={Link} to="/shipment" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

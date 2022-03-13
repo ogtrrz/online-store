@@ -141,32 +141,40 @@ export const OrderItemUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 data-cy="product"
                 label={translate('storeApp.orderItem.product')}
                 type="select"
+                required
               >
                 <option value="" key="0" />
                 {products
                   ? products.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.name}
                       </option>
                     ))
                   : null}
               </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
               <ValidatedField
                 id="order-item-order"
                 name="order"
                 data-cy="order"
                 label={translate('storeApp.orderItem.order')}
                 type="select"
+                required
               >
                 <option value="" key="0" />
                 {productOrders
                   ? productOrders.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.code}
                       </option>
                     ))
                   : null}
               </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/order-item" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

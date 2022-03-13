@@ -163,16 +163,36 @@ export const InvoiceUpdate = (props: RouteComponentProps<{ id: string }>) => {
                   validate: v => isNumber(v) || translate('entity.validation.number'),
                 }}
               />
-              <ValidatedField id="invoice-order" name="order" data-cy="order" label={translate('storeApp.invoice.order')} type="select">
+              <ValidatedField
+                label={translate('storeApp.invoice.code')}
+                id="invoice-code"
+                name="code"
+                data-cy="code"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                }}
+              />
+              <ValidatedField
+                id="invoice-order"
+                name="order"
+                data-cy="order"
+                label={translate('storeApp.invoice.order')}
+                type="select"
+                required
+              >
                 <option value="" key="0" />
                 {productOrders
                   ? productOrders.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.code}
                       </option>
                     ))
                   : null}
               </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/invoice" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

@@ -50,27 +50,25 @@ describe('Shipment e2e test', () => {
     expect(await shipmentComponentsPage.createButton.isEnabled()).to.be.true;
   });
 
-  it('should create and delete Shipments', async () => {
-    const beforeRecordsCount = (await isVisible(shipmentComponentsPage.noRecords))
-      ? 0
-      : await getRecordsCount(shipmentComponentsPage.table);
-    shipmentUpdatePage = await shipmentComponentsPage.goToCreateShipment();
-    await shipmentUpdatePage.enterData();
-    expect(await isVisible(shipmentUpdatePage.saveButton)).to.be.false;
+  /* it('should create and delete Shipments', async () => {
+        const beforeRecordsCount = await isVisible(shipmentComponentsPage.noRecords) ? 0 : await getRecordsCount(shipmentComponentsPage.table);
+        shipmentUpdatePage = await shipmentComponentsPage.goToCreateShipment();
+        await shipmentUpdatePage.enterData();
+        expect(await isVisible(shipmentUpdatePage.saveButton)).to.be.false;
 
-    expect(await shipmentComponentsPage.createButton.isEnabled()).to.be.true;
-    await waitUntilDisplayed(shipmentComponentsPage.table);
-    await waitUntilCount(shipmentComponentsPage.records, beforeRecordsCount + 1);
-    expect(await shipmentComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
+        expect(await shipmentComponentsPage.createButton.isEnabled()).to.be.true;
+        await waitUntilDisplayed(shipmentComponentsPage.table);
+        await waitUntilCount(shipmentComponentsPage.records, beforeRecordsCount + 1);
+        expect(await shipmentComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
 
-    await shipmentComponentsPage.deleteShipment();
-    if (beforeRecordsCount !== 0) {
-      await waitUntilCount(shipmentComponentsPage.records, beforeRecordsCount);
-      expect(await shipmentComponentsPage.records.count()).to.eq(beforeRecordsCount);
-    } else {
-      await waitUntilDisplayed(shipmentComponentsPage.noRecords);
-    }
-  });
+        await shipmentComponentsPage.deleteShipment();
+        if(beforeRecordsCount !== 0) {
+          await waitUntilCount(shipmentComponentsPage.records, beforeRecordsCount);
+          expect(await shipmentComponentsPage.records.count()).to.eq(beforeRecordsCount);
+        } else {
+          await waitUntilDisplayed(shipmentComponentsPage.noRecords);
+        }
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

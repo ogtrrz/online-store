@@ -125,16 +125,20 @@ export const ShipmentUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 data-cy="invoice"
                 label={translate('storeApp.shipment.invoice')}
                 type="select"
+                required
               >
                 <option value="" key="0" />
                 {invoices
                   ? invoices.map(otherEntity => (
                       <option value={otherEntity.id} key={otherEntity.id}>
-                        {otherEntity.id}
+                        {otherEntity.code}
                       </option>
                     ))
                   : null}
               </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/shipment" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

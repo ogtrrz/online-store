@@ -40,6 +40,7 @@
   "readOnly": false,
   "relationships": [
     {
+      "otherEntityField": "name",
       "otherEntityName": "productCategory",
       "otherEntityRelationshipName": "product",
       "relationshipName": "productCategory",

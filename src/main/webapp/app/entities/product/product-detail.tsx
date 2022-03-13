@@ -75,7 +75,7 @@ export const ProductDetail = (props: RouteComponentProps<{ id: string }>) => {
           <dt>
             <Translate contentKey="storeApp.product.productCategory">Product Category</Translate>
           </dt>
-          <dd>{productEntity.productCategory ? productEntity.productCategory.id : ''}</dd>
+          <dd>{productEntity.productCategory ? productEntity.productCategory.name : ''}</dd>
         </dl>
         <Button tag={Link} to="/product" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" />{' '}

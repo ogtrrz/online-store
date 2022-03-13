@@ -134,8 +134,8 @@ export const OrderItem = (props: RouteComponentProps<{ url: string }>) => {
                   <td>
                     <Translate contentKey={`storeApp.OrderItemStatus.${orderItem.status}`} />
                   </td>
-                  <td>{orderItem.product ? <Link to={`product/${orderItem.product.id}`}>{orderItem.product.id}</Link> : ''}</td>
-                  <td>{orderItem.order ? <Link to={`product-order/${orderItem.order.id}`}>{orderItem.order.id}</Link> : ''}</td>
+                  <td>{orderItem.product ? <Link to={`product/${orderItem.product.id}`}>{orderItem.product.name}</Link> : ''}</td>
+                  <td>{orderItem.order ? <Link to={`product-order/${orderItem.order.id}`}>{orderItem.order.code}</Link> : ''}</td>
                   <td className="text-end">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${orderItem.id}`} color="info" size="sm" data-cy="entityDetailsButton">

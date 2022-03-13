@@ -13,7 +13,7 @@ export interface ICustomer {
   addressLine2?: string | null;
   city?: string;
   country?: string;
-  user?: IUser | null;
+  user?: IUser;
   orders?: IProductOrder[] | null;
 }
 

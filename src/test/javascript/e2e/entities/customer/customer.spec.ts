@@ -50,27 +50,25 @@ describe('Customer e2e test', () => {
     expect(await customerComponentsPage.createButton.isEnabled()).to.be.true;
   });
 
-  it('should create and delete Customers', async () => {
-    const beforeRecordsCount = (await isVisible(customerComponentsPage.noRecords))
-      ? 0
-      : await getRecordsCount(customerComponentsPage.table);
-    customerUpdatePage = await customerComponentsPage.goToCreateCustomer();
-    await customerUpdatePage.enterData();
-    expect(await isVisible(customerUpdatePage.saveButton)).to.be.false;
+  /* it('should create and delete Customers', async () => {
+        const beforeRecordsCount = await isVisible(customerComponentsPage.noRecords) ? 0 : await getRecordsCount(customerComponentsPage.table);
+        customerUpdatePage = await customerComponentsPage.goToCreateCustomer();
+        await customerUpdatePage.enterData();
+        expect(await isVisible(customerUpdatePage.saveButton)).to.be.false;
 
-    expect(await customerComponentsPage.createButton.isEnabled()).to.be.true;
-    await waitUntilDisplayed(customerComponentsPage.table);
-    await waitUntilCount(customerComponentsPage.records, beforeRecordsCount + 1);
-    expect(await customerComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
+        expect(await customerComponentsPage.createButton.isEnabled()).to.be.true;
+        await waitUntilDisplayed(customerComponentsPage.table);
+        await waitUntilCount(customerComponentsPage.records, beforeRecordsCount + 1);
+        expect(await customerComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
 
-    await customerComponentsPage.deleteCustomer();
-    if (beforeRecordsCount !== 0) {
-      await waitUntilCount(customerComponentsPage.records, beforeRecordsCount);
-      expect(await customerComponentsPage.records.count()).to.eq(beforeRecordsCount);
-    } else {
-      await waitUntilDisplayed(customerComponentsPage.noRecords);
-    }
-  });
+        await customerComponentsPage.deleteCustomer();
+        if(beforeRecordsCount !== 0) {
+          await waitUntilCount(customerComponentsPage.records, beforeRecordsCount);
+          expect(await customerComponentsPage.records.count()).to.eq(beforeRecordsCount);
+        } else {
+          await waitUntilDisplayed(customerComponentsPage.noRecords);
+        }
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

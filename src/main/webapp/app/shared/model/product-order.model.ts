@@ -11,7 +11,7 @@ export interface IProductOrder {
   code?: string;
   orderItems?: IOrderItem[] | null;
   invoices?: IInvoice[] | null;
-  customer?: ICustomer | null;
+  customer?: ICustomer;
 }
 
 export const defaultValue: Readonly<IProductOrder> = {};

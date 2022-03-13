@@ -155,7 +155,7 @@ export const Product = (props: RouteComponentProps<{ url: string }>) => {
                   </td>
                   <td>
                     {product.productCategory ? (
-                      <Link to={`product-category/${product.productCategory.id}`}>{product.productCategory.id}</Link>
+                      <Link to={`product-category/${product.productCategory.id}`}>{product.productCategory.name}</Link>
                     ) : (
                       ''
                     )}

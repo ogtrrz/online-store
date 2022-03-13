@@ -12,8 +12,9 @@ export interface IInvoice {
   paymentMethod?: PaymentMethod;
   paymentDate?: string;
   paymentAmount?: number;
+  code?: string;
   shipments?: IShipment[] | null;
-  order?: IProductOrder | null;
+  order?: IProductOrder;
 }
 
 export const defaultValue: Readonly<IInvoice> = {};

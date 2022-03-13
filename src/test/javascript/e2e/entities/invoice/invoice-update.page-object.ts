@@ -13,6 +13,7 @@ export default class InvoiceUpdatePage {
   paymentMethodSelect: ElementFinder = element(by.css('select#invoice-paymentMethod'));
   paymentDateInput: ElementFinder = element(by.css('input#invoice-paymentDate'));
   paymentAmountInput: ElementFinder = element(by.css('input#invoice-paymentAmount'));
+  codeInput: ElementFinder = element(by.css('input#invoice-code'));
   orderSelect: ElementFinder = element(by.css('select#invoice-order'));
 
   getPageTitle() {
@@ -73,6 +74,14 @@ export default class InvoiceUpdatePage {
     return this.paymentAmountInput.getAttribute('value');
   }
 
+  async setCodeInput(code) {
+    await this.codeInput.sendKeys(code);
+  }
+
+  async getCodeInput() {
+    return this.codeInput.getAttribute('value');
+  }
+
   async orderSelectLastOption() {
     await this.orderSelect.all(by.tagName('option')).last().click();
   }
@@ -114,6 +123,8 @@ export default class InvoiceUpdatePage {
     await this.setPaymentDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM');
     await waitUntilDisplayed(this.saveButton);
     await this.setPaymentAmountInput('5');
+    await waitUntilDisplayed(this.saveButton);
+    await this.setCodeInput('code');
     await this.orderSelectLastOption();
     await this.save();
     await waitUntilHidden(this.saveButton);

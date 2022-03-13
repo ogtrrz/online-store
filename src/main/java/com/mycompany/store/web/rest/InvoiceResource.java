@@ -142,12 +142,21 @@ public class InvoiceResource {
      * {@code GET  /invoices} : get all the invoices.
      *
      * @param pageable the pagination information.
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of invoices in body.
      */
     @GetMapping("/invoices")
-    public ResponseEntity<List<Invoice>> getAllInvoices(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<Invoice>> getAllInvoices(
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable,
+        @RequestParam(required = false, defaultValue = "true") boolean eagerload
+    ) {
         log.debug("REST request to get a page of Invoices");
-        Page<Invoice> page = invoiceService.findAll(pageable);
+        Page<Invoice> page;
+        if (eagerload) {
+            page = invoiceService.findAllWithEagerRelationships(pageable);
+        } else {
+            page = invoiceService.findAll(pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
