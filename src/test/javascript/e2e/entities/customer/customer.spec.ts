@@ -50,7 +50,7 @@ describe('Customer e2e test', () => {
     expect(await customerComponentsPage.createButton.isEnabled()).to.be.true;
   });
 
-  /* it('should create and delete Customers', async () => {
+  it('should create and delete Customers', async () => {
         const beforeRecordsCount = await isVisible(customerComponentsPage.noRecords) ? 0 : await getRecordsCount(customerComponentsPage.table);
         customerUpdatePage = await customerComponentsPage.goToCreateCustomer();
         await customerUpdatePage.enterData();
@@ -68,7 +68,7 @@ describe('Customer e2e test', () => {
         } else {
           await waitUntilDisplayed(customerComponentsPage.noRecords);
         }
-    }); */
+    });
 
   after(async () => {
     await navBarPage.autoSignOut();

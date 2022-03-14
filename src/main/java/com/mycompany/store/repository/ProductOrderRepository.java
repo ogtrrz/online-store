@@ -40,7 +40,7 @@ public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long
 
 
 //Filter byUser
-//    @Query("select productOrder from ProductOrder po cross join customer c cross join jhi_us//er u where po.customer_id=c")
+//    @Query("select productOrder from ProductOrder po cross join customer c cross join jhi_user.id =:login u where po.customer_id=c")
 //    Page<ProductOrder> findAllByCustomerUserLogin(@Param("login") String login, Pageable pageable);
 
 
