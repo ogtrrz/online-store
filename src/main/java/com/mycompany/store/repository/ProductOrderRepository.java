@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
  * Spring Data SQL repository for the ProductOrder entity.
  */
 @Repository
-public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long> {
+public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long>, JpaSpecificationExecutor<ProductOrder> {
     default Optional<ProductOrder> findOneWithEagerRelationships(Long id) {
         return this.findOneWithToOneRelationships(id);
     }
@@ -37,4 +37,16 @@ public interface ProductOrderRepository extends JpaRepository<ProductOrder, Long
 
     @Query("select productOrder from ProductOrder productOrder left join fetch productOrder.customer where productOrder.id =:id")
     Optional<ProductOrder> findOneWithToOneRelationships(@Param("id") Long id);
+
+
+//Filter byUser
+//    @Query("select productOrder from ProductOrder po cross join customer c cross join jhi_us//er u where po.customer_id=c")
+//    Page<ProductOrder> findAllByCustomerUserLogin(@Param("login") String login, Pageable pageable);
+
+
+    Page<ProductOrder> findAllByCustomerUserLogin(String login, Pageable pageable);
+
+    ProductOrder findOneByIdAndCustomerUserLogin(Long id, String login);
+
+
 }

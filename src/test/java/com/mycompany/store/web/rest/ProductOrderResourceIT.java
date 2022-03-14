@@ -7,9 +7,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mycompany.store.IntegrationTest;
 import com.mycompany.store.domain.Customer;
+import com.mycompany.store.domain.Invoice;
+import com.mycompany.store.domain.OrderItem;
 import com.mycompany.store.domain.ProductOrder;
 import com.mycompany.store.domain.enumeration.OrderStatus;
 import com.mycompany.store.repository.ProductOrderRepository;
+import com.mycompany.store.service.criteria.ProductOrderCriteria;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -225,6 +228,324 @@ class ProductOrderResourceIT {
             .andExpect(jsonPath("$.placedDate").value(DEFAULT_PLACED_DATE.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE));
+    }
+
+    @Test
+    @Transactional
+    void getProductOrdersByIdFiltering() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        Long id = productOrder.getId();
+
+        defaultProductOrderShouldBeFound("id.equals=" + id);
+        defaultProductOrderShouldNotBeFound("id.notEquals=" + id);
+
+        defaultProductOrderShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultProductOrderShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultProductOrderShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultProductOrderShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByPlacedDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where placedDate equals to DEFAULT_PLACED_DATE
+        defaultProductOrderShouldBeFound("placedDate.equals=" + DEFAULT_PLACED_DATE);
+
+        // Get all the productOrderList where placedDate equals to UPDATED_PLACED_DATE
+        defaultProductOrderShouldNotBeFound("placedDate.equals=" + UPDATED_PLACED_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByPlacedDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where placedDate not equals to DEFAULT_PLACED_DATE
+        defaultProductOrderShouldNotBeFound("placedDate.notEquals=" + DEFAULT_PLACED_DATE);
+
+        // Get all the productOrderList where placedDate not equals to UPDATED_PLACED_DATE
+        defaultProductOrderShouldBeFound("placedDate.notEquals=" + UPDATED_PLACED_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByPlacedDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where placedDate in DEFAULT_PLACED_DATE or UPDATED_PLACED_DATE
+        defaultProductOrderShouldBeFound("placedDate.in=" + DEFAULT_PLACED_DATE + "," + UPDATED_PLACED_DATE);
+
+        // Get all the productOrderList where placedDate equals to UPDATED_PLACED_DATE
+        defaultProductOrderShouldNotBeFound("placedDate.in=" + UPDATED_PLACED_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByPlacedDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where placedDate is not null
+        defaultProductOrderShouldBeFound("placedDate.specified=true");
+
+        // Get all the productOrderList where placedDate is null
+        defaultProductOrderShouldNotBeFound("placedDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where status equals to DEFAULT_STATUS
+        defaultProductOrderShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the productOrderList where status equals to UPDATED_STATUS
+        defaultProductOrderShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where status not equals to DEFAULT_STATUS
+        defaultProductOrderShouldNotBeFound("status.notEquals=" + DEFAULT_STATUS);
+
+        // Get all the productOrderList where status not equals to UPDATED_STATUS
+        defaultProductOrderShouldBeFound("status.notEquals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultProductOrderShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the productOrderList where status equals to UPDATED_STATUS
+        defaultProductOrderShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where status is not null
+        defaultProductOrderShouldBeFound("status.specified=true");
+
+        // Get all the productOrderList where status is null
+        defaultProductOrderShouldNotBeFound("status.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where code equals to DEFAULT_CODE
+        defaultProductOrderShouldBeFound("code.equals=" + DEFAULT_CODE);
+
+        // Get all the productOrderList where code equals to UPDATED_CODE
+        defaultProductOrderShouldNotBeFound("code.equals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByCodeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where code not equals to DEFAULT_CODE
+        defaultProductOrderShouldNotBeFound("code.notEquals=" + DEFAULT_CODE);
+
+        // Get all the productOrderList where code not equals to UPDATED_CODE
+        defaultProductOrderShouldBeFound("code.notEquals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where code in DEFAULT_CODE or UPDATED_CODE
+        defaultProductOrderShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
+
+        // Get all the productOrderList where code equals to UPDATED_CODE
+        defaultProductOrderShouldNotBeFound("code.in=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where code is not null
+        defaultProductOrderShouldBeFound("code.specified=true");
+
+        // Get all the productOrderList where code is null
+        defaultProductOrderShouldNotBeFound("code.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByCodeContainsSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where code contains DEFAULT_CODE
+        defaultProductOrderShouldBeFound("code.contains=" + DEFAULT_CODE);
+
+        // Get all the productOrderList where code contains UPDATED_CODE
+        defaultProductOrderShouldNotBeFound("code.contains=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+
+        // Get all the productOrderList where code does not contain DEFAULT_CODE
+        defaultProductOrderShouldNotBeFound("code.doesNotContain=" + DEFAULT_CODE);
+
+        // Get all the productOrderList where code does not contain UPDATED_CODE
+        defaultProductOrderShouldBeFound("code.doesNotContain=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByOrderItemIsEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+        OrderItem orderItem;
+        if (TestUtil.findAll(em, OrderItem.class).isEmpty()) {
+            orderItem = OrderItemResourceIT.createEntity(em);
+            em.persist(orderItem);
+            em.flush();
+        } else {
+            orderItem = TestUtil.findAll(em, OrderItem.class).get(0);
+        }
+        em.persist(orderItem);
+        em.flush();
+        productOrder.addOrderItem(orderItem);
+        productOrderRepository.saveAndFlush(productOrder);
+        Long orderItemId = orderItem.getId();
+
+        // Get all the productOrderList where orderItem equals to orderItemId
+        defaultProductOrderShouldBeFound("orderItemId.equals=" + orderItemId);
+
+        // Get all the productOrderList where orderItem equals to (orderItemId + 1)
+        defaultProductOrderShouldNotBeFound("orderItemId.equals=" + (orderItemId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByInvoiceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+        Invoice invoice;
+        if (TestUtil.findAll(em, Invoice.class).isEmpty()) {
+            invoice = InvoiceResourceIT.createEntity(em);
+            em.persist(invoice);
+            em.flush();
+        } else {
+            invoice = TestUtil.findAll(em, Invoice.class).get(0);
+        }
+        em.persist(invoice);
+        em.flush();
+        productOrder.addInvoice(invoice);
+        productOrderRepository.saveAndFlush(productOrder);
+        Long invoiceId = invoice.getId();
+
+        // Get all the productOrderList where invoice equals to invoiceId
+        defaultProductOrderShouldBeFound("invoiceId.equals=" + invoiceId);
+
+        // Get all the productOrderList where invoice equals to (invoiceId + 1)
+        defaultProductOrderShouldNotBeFound("invoiceId.equals=" + (invoiceId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllProductOrdersByCustomerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        productOrderRepository.saveAndFlush(productOrder);
+        Customer customer;
+        if (TestUtil.findAll(em, Customer.class).isEmpty()) {
+            customer = CustomerResourceIT.createEntity(em);
+            em.persist(customer);
+            em.flush();
+        } else {
+            customer = TestUtil.findAll(em, Customer.class).get(0);
+        }
+        em.persist(customer);
+        em.flush();
+        productOrder.setCustomer(customer);
+        productOrderRepository.saveAndFlush(productOrder);
+        Long customerId = customer.getId();
+
+        // Get all the productOrderList where customer equals to customerId
+        defaultProductOrderShouldBeFound("customerId.equals=" + customerId);
+
+        // Get all the productOrderList where customer equals to (customerId + 1)
+        defaultProductOrderShouldNotBeFound("customerId.equals=" + (customerId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultProductOrderShouldBeFound(String filter) throws Exception {
+        restProductOrderMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(productOrder.getId().intValue())))
+            .andExpect(jsonPath("$.[*].placedDate").value(hasItem(DEFAULT_PLACED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)));
+
+        // Check, that the count call also returns 1
+        restProductOrderMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultProductOrderShouldNotBeFound(String filter) throws Exception {
+        restProductOrderMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restProductOrderMockMvc
+            .perform(get(ENTITY_API_URL + "/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
     }
 
     @Test

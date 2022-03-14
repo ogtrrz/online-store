@@ -2,7 +2,9 @@ package com.mycompany.store.web.rest;
 
 import com.mycompany.store.domain.ProductOrder;
 import com.mycompany.store.repository.ProductOrderRepository;
+import com.mycompany.store.service.ProductOrderQueryService;
 import com.mycompany.store.service.ProductOrderService;
+import com.mycompany.store.service.criteria.ProductOrderCriteria;
 import com.mycompany.store.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -43,9 +44,16 @@ public class ProductOrderResource {
 
     private final ProductOrderRepository productOrderRepository;
 
-    public ProductOrderResource(ProductOrderService productOrderService, ProductOrderRepository productOrderRepository) {
+    private final ProductOrderQueryService productOrderQueryService;
+
+    public ProductOrderResource(
+        ProductOrderService productOrderService,
+        ProductOrderRepository productOrderRepository,
+        ProductOrderQueryService productOrderQueryService
+    ) {
         this.productOrderService = productOrderService;
         this.productOrderRepository = productOrderRepository;
+        this.productOrderQueryService = productOrderQueryService;
     }
 
     /**
@@ -142,23 +150,30 @@ public class ProductOrderResource {
      * {@code GET  /product-orders} : get all the productOrders.
      *
      * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of productOrders in body.
      */
     @GetMapping("/product-orders")
     public ResponseEntity<List<ProductOrder>> getAllProductOrders(
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable,
-        @RequestParam(required = false, defaultValue = "true") boolean eagerload
+        ProductOrderCriteria criteria,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get a page of ProductOrders");
-        Page<ProductOrder> page;
-        if (eagerload) {
-            page = productOrderService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = productOrderService.findAll(pageable);
-        }
+        log.debug("REST request to get ProductOrders by criteria: {}", criteria);
+        Page<ProductOrder> page = productOrderQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /product-orders/count} : count all the productOrders.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/product-orders/count")
+    public ResponseEntity<Long> countProductOrders(ProductOrderCriteria criteria) {
+        log.debug("REST request to count ProductOrders by criteria: {}", criteria);
+        return ResponseEntity.ok().body(productOrderQueryService.countByCriteria(criteria));
     }
 
     /**
